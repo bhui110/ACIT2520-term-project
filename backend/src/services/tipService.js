@@ -51,6 +51,10 @@ export default {
     // TODO: write changes to database with await writeDb(db)
     // TODO: return true
     const db = await readDb();
+    const index = db.tips.findIndex(tip => tip.id === id && tip.userId === userId);
+    if (index == -1) return false;
+    db.tips.splice(index, 1);
+    await writeDb(db);
     return true
   },
 };
