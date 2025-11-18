@@ -17,12 +17,15 @@ export default {
     // TODO: return the id of the created tip
 
     const db = await readDb();
-    const uuid = crypto.randomUUID();
-    const tip = { id: uuid, title, userId };
+    const tip = {
+      id: crypto.randomUUID(),
+      title,
+      userId
+    };
 
     db.tips.push(tip);
     await writeDb(db);
-    return uuid;
+    return tip.id;
   },
 
   async update({ id, title, userId }) {
@@ -33,13 +36,9 @@ export default {
     // TODO: write changes to database with await writeDb(db)
     // TODO: return true
     const db = await readDb();
-    db.tips.forEach(tip => {
-      if (tip.id == id && tip.userID == userId) {
-        tip.title = title;
-      } else {
-        return false
-      }
-    });
+    const tip = db.tips.find(t => t.id === id && t.userId === userId);
+    if (!tip) return false;
+    tip.title = title;
     await writeDb(db);
     return true;
   },
@@ -52,6 +51,6 @@ export default {
     // TODO: write changes to database with await writeDb(db)
     // TODO: return true
     const db = await readDb();
-    
+    return true
   },
 };
